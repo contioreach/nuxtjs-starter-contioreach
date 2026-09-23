@@ -1,0 +1,43 @@
+{
+  "name": "nuxtjs-starter-contioreach",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "description": "A production-ready Nuxt 4 blog powered by the ContioReach headless CMS — ISR, cached CMS reads with tag-style invalidation, on-demand revalidation webhooks, SEO metadata and JSON-LD.",
+  "license": "MIT",
+  "homepage": "https://github.com/contioreach/nuxtjs-starter-contioreach#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/contioreach/nuxtjs-starter-contioreach.git"
+  },
+  "keywords": [
+    "nuxt",
+    "nuxt4",
+    "vue",
+    "headless-cms",
+    "blog",
+    "isr",
+    "on-demand-revalidation",
+    "contioreach",
+    "example",
+    "starter",
+    "tailwindcss",
+    "seo"
+  ],
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "^4.5.2",
+    "vue": "^3.5.43",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
