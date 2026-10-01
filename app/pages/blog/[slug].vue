@@ -18,17 +18,18 @@ if (error.value || !data.value?.post) {
 const post = computed(() => data.value.post);
 
 useSeo(() => ({
-  title: `${post.value.title} | ContioReach`,
+  title: post.value.metaTitle !== post.value.title ? post.value.metaTitle : `${post.value.title} | ContioReach`,
   description: post.value.description || post.value.excerpt,
   path: `/blog/${post.value.slug}`,
   image: post.value.coverImage || undefined,
-  alt: post.value.title,
+  alt: post.value.coverImageAlt,
   type: "article",
   publishedTime: post.value.publishedAt,
   modifiedTime: post.value.updatedAt,
   keywords: [
     post.value.category?.toLowerCase(),
     post.value.primaryKeyword,
+    ...(post.value.secondaryKeywords || []),
     ...(post.value.tags?.map((tag) => tag.name?.toLowerCase()) || []),
     "headless cms",
     "content marketing",
