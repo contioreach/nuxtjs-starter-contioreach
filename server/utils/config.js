@@ -17,8 +17,10 @@ export function cmsConfig() {
   };
 }
 
+/* Optional until you set the webhook up — while it is empty the webhook
+   rejects every call, so the site still runs on a fresh clone. */
 export function revalidationSecret() {
-  return required("REVALIDATION_SECRET", useRuntimeConfig().revalidationSecret);
+  return useRuntimeConfig().revalidationSecret || "";
 }
 
 export function apiHeaders() {

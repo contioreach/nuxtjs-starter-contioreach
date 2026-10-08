@@ -15,6 +15,7 @@ useSeoMeta({
 </script>
 
 <template>
+  <DemoBanner />
   <SiteHeader />
   <main class="flex-1">
     <NuxtPage />

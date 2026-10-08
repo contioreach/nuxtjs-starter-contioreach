@@ -1,4 +1,4 @@
-import { API_ENDPOINTS, CACHE_CONFIG, EMPTY_META } from "~~/shared/constants";
+import { API_ENDPOINTS, CACHE_CONFIG, DEMO_API_KEY, EMPTY_META } from "~~/shared/constants";
 
 /* Every read goes through here. Nitro's $fetch is uncached by default, so
    caching is explicit: each exported reader is wrapped in defineCachedFunction
@@ -128,6 +128,35 @@ export function transformBlogForDisplay(blog) {
 
 export function transformBlogsForDisplay(blogs) {
   return (blogs || []).map(transformBlogForDisplay);
+}
+
+/* What the demo banner needs to know about CMS_API_KEY, and nothing more — the
+   key itself never leaves the server. "demo" while the demo key is set,
+   "invalid" when the CMS rejects the key, otherwise null. A network failure is
+   not the key's fault, so it reads as null too.
+
+   Deliberately not a cachedReader: that cache can outlive a restart, and the
+   banner has to follow the key the moment you change it. The CMS probe is
+   remembered per process, per key, for the usual window instead. */
+let keyProbe = { apiKey: null, status: null, checkedAt: 0 };
+
+export async function getApiKeyStatus() {
+  const { baseUrl, apiKey } = cmsConfig();
+  if (apiKey === DEMO_API_KEY) return "demo";
+
+  const fresh = Date.now() - keyProbe.checkedAt < CACHE_CONFIG.REVALIDATE_TIME * 1000;
+  if (keyProbe.apiKey === apiKey && fresh) return keyProbe.status;
+
+  try {
+    const response = await fetch(`${baseUrl}${API_ENDPOINTS.CATEGORIES}?limit=1`, {
+      headers: apiHeaders(),
+    });
+    const status = response.status === 401 ? "invalid" : null;
+    keyProbe = { apiKey, status, checkedAt: Date.now() };
+    return status;
+  } catch {
+    return null;
+  }
 }
 
 /* ---- helpers for the sitemap ---- */

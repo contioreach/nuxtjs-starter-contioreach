@@ -28,7 +28,9 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event).catch(() => ({}));
     const secret = body?.secret || getHeader(event, "x-api-key");
 
-    if (secret !== revalidationSecret()) {
+    // An unset secret matches nothing, so the webhook stays shut until it is configured.
+    const expected = revalidationSecret();
+    if (!expected || secret !== expected) {
       setResponseStatus(event, 401);
       return { error: "Invalid token" };
     }
